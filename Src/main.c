@@ -26,9 +26,19 @@
 #define IRQNO_TIMER2 28
 #define IRQNO_I2C1 31
 
+uint32_t* pNVIC_IPR_Base = (uint32_t*) 0xE000E400;
+uint32_t* pNVIC_ISER_Base = (uint32_t*) 0xE000E100;
+uint32_t* pNVIC_ISPR_Base = (uint32_t*) 0xE000E200;
+
+void set_priority_for_irq(uint8_t irqNum) {
+
+}
+
 int main(void)
 {
 	//1) Set priority for both peripherals
+
+	set_priority_for_irq();
 
 	//2) Set the Interrupt pending bit in NVIC PR
 
@@ -36,4 +46,18 @@ int main(void)
 
     /* Loop forever */
 	for(;;);
+}
+
+/**
+ * TIM2 Handler method
+ */
+void TIM2_IRQHandler() {
+	printf("This is the TIM2_IRQHandler!\n");
+}
+
+/**
+ * I2C1 Handler method
+ */
+void I2C1_EV_IRQHandler() {
+	printf("This is the I2C1_EV_IRQHandler!\n");
 }
