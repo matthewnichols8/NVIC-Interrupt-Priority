@@ -44,12 +44,16 @@ int main(void)
 {
 	//1) Set priority for both peripherals
 
-	set_priority_for_irq(IRQNO_TIMER2);
-	set_priority_for_irq(IRQNO_I2C1);
+	set_priority_for_irq(IRQNO_TIMER2, 0x80);
+	set_priority_for_irq(IRQNO_I2C1, 0x80);
 
 	//2) Set the Interrupt pending bit in NVIC PR
+	*pNVIC_ISPR_Base |= (1 << IRQNO_TIMER2); //sets pending bit
 
 	//3) Enable the IRQs in NVIC ISER
+	*pNVIC_ISER_Base |= (1 << IRQNO_I2C1);
+	*pNVIC_ISER_Base |= (1 << IRQNO_TIMER2);
+
 
     /* Loop forever */
 	for(;;);
@@ -60,6 +64,7 @@ int main(void)
  */
 void TIM2_IRQHandler() {
 	printf("This is the TIM2_IRQHandler!\n");
+	*pNVIC_ISPR_Base |= (1 << IRQNO_I2C1); //Trigger interrupt for I2C1
 }
 
 /**
