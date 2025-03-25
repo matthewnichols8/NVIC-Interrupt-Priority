@@ -23,8 +23,17 @@
   #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
 #endif
 
+#define IRQNO_TIMER2 28
+#define IRQNO_I2C1 31
+
 int main(void)
 {
+	//1) Set priority for both peripherals
+
+	//2) Set the Interrupt pending bit in NVIC PR
+
+	//3) Enable the IRQs in NVIC ISER
+
     /* Loop forever */
 	for(;;);
 }
