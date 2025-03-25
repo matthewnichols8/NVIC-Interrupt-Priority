@@ -30,15 +30,22 @@ uint32_t* pNVIC_IPR_Base = (uint32_t*) 0xE000E400;
 uint32_t* pNVIC_ISER_Base = (uint32_t*) 0xE000E100;
 uint32_t* pNVIC_ISPR_Base = (uint32_t*) 0xE000E200;
 
-void set_priority_for_irq(uint8_t irqNum) {
+void set_priority_for_irq(uint8_t irqNum, uint8_t priorityNum) {
+	uint8_t iprx = irqNum / 4;
+	uint8_t* ipr = (uint8_t*) (pNVIC_IPR_Base + iprx);
 
+	uint8_t pos = (irqNum % 4) * 8; //Position in iprx
+
+	*ipr &= ~(0xFF << pos); // Clears bit position
+	*ipr |= (priorityNum << pos); //Sets bits
 }
 
 int main(void)
 {
 	//1) Set priority for both peripherals
 
-	set_priority_for_irq();
+	set_priority_for_irq(IRQNO_TIMER2);
+	set_priority_for_irq(IRQNO_I2C1);
 
 	//2) Set the Interrupt pending bit in NVIC PR
 
